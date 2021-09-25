@@ -4,12 +4,12 @@ React SSR app, product cards carousel
 
 ## Installation
 
-//Install
+Install
 ```
 npm install
 ```
 
-//Run
+Run
 ```
 npm run startAll
 ```
