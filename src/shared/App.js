@@ -8,17 +8,38 @@ import { Route, Switch } from 'react-router-dom';
 
 class App extends Component {
     state = {
-        
+        products : [],
+    }
+
+    componentDidMount() {
+        fetch("http://localhost:4000/api/get-products", {
+            method: 'POST',
+            headers: {
+                "Content-Type": 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.error){
+                alert(data.message)
+            }else{
+                    this.setState({
+                        products: data.data
+                    })
+            }
+        })
     }
 
     render() {
-        
-    
+
         return ( 
             <>
            
-
-            { /* ROUTING */ }
+            {this.state.products.length === 0? 
+            
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            :
+            
             
             <Switch > {
                 routes.map(({ path, exact, component: C, ...rest }) => ( 
@@ -29,16 +50,17 @@ class App extends Component {
                         exact = { exact }
                         render = {
                             (props) => ( 
-                                <C 
-                                    
-                                    /> 
+                                <C  
+                                products = {this.state.products}
+                                /> 
                             )
                         }
                     />
                 ))
             } 
-            </Switch> { /* ROUTING */ }
-     
+            </Switch> 
+            
+            }
             </>
         );
     }

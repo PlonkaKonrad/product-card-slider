@@ -9,9 +9,7 @@ import routes from '../shared/routes'
 import { ServerStyleSheet } from 'styled-components';
 import cookieParser from "cookie-parser";
 import fetch from 'node-fetch';
-import { v4 as uuid } from 'uuid';
-import passwordHash from 'password-hash';
-const MongoClient = require('mongodb').MongoClient;
+
 
 // express middleware 
 const app = express()
@@ -22,96 +20,36 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 app.use(cookieParser());
 
-// MONGO database parameters
-const mongodbURL = 'mongodb://127.0.0.1:27017';
-const mongodbNAME = 'CKZ';
+
+// products api variables
+
+const token = '70876bc3a88f6644c53af702622edcd8'
+const url = `https://integrations.yaxint.com/api/products?api_token=${token}`
 
 
-///////////////////////////////////////////////////////////////////////////////////////// LOGIN USER
+// get products
 
-app.post('/ckz-api-loginUser', (req,res) => {
-    
-    // MongoClient.connect(mongodbURL, {}, (error,client) => {
-    //     if(error) console.log('Cannot connect to the database', error)
-    //     else{
-    //         const db = client.db(mongodbNAME)
-    //         db.collection('Users').find({
-    //             email: req.body.email
-    //         }).toArray((error,result) => {
-    //             if(error) {
-    //                 console.log(error)
-    //             }else if(result.length === 0){
-    //                 res.send({message:'Konto z podanym adresem email nie istnieje', error: true})
-    //             }else if(result.length > 0){
+app.post('/api/get-products', (req,res) => {
 
-    //                 if(passwordHash.verify(req.body.password,result[0].password)){
-                        
-    //                     db.collection('Users').updateOne(
-    //                         { email: req.body.email },
-    //                         { $set: { lastLogin: new Date() }},
-    //                         { upsert: true }
-    //                     )
-                       
-    //                     res.send({message:'Zalogowano pomyślnie', error: false, account:result[0]})
-    //                 }else{
-    //                     res.send({message:'Nieprawidłowe hasło', error: true})
-    //                 }
-    //             }
-    //     })
+    fetch(url, {
+        method: 'GET',
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data){
+            res.send(data)
+        }else{
+            res.send({error: true, message: "Couldn't get products"})
+        }
+    })
 
-    // }})
+
 })
-    
-///////////////////////////////////////////////////////////////////////////////////////// REGISTER NEW USER
 
-app.post('/ckz-api-registerNewUser', (req,res) => {
-    
-    // MongoClient.connect(mongodbURL, {}, (error,client) => {
-    //     if(error) console.log('Cannot connect to the database', error)
-    //     else{
-    //         const db = client.db(mongodbNAME)
-
-    //         db.collection('Users').find({
-    //             email: req.body.email
-    //         }).toArray((error,result) => {
-    //             if(error) {
-    //                 console.log(error)
-    //             }else{
-    //                 if(result.length > 0 && result[0].email == req.body.email){
-    //                     res.send({message:'Email jest już zajęty', error: true});
-    //                     res.end()
-    //                 }else{
-    //                     db.collection('Users').insertOne({
-    //                             name: req.body.name,
-    //                             surname: req.body.surname,
-    //                             email: req.body.email,
-    //                             password: passwordHash.generate(req.body.password),
-    //                             createdAt: new Date(),
-    //                             lastLogin: new Date(),
-    //                             accountConfirmed: false,
-    //                         }, (error, result)=>{
-    //                         if(error) {
-    //                             res.send({message:'Nie udało się zarejestrować użytkownika', error: true})
-    //                             res.end()
-    //                         }
-    //                         else{
-    //                             console.log(result.acknowledged)
-                               
-    //                             if(result.acknowledged){
-    //                                 res.send({message: 'Zarejestrowano poprawnie', error: false});
-    //                             }
-                                
-    //                         }
-    //                     })  
-    //                 }
-    //             }
-    //         })
-          
-            
-    //     }    
-        
-    // })
-})
 
 
 /////////////////////////////////////////////////////////////////////////////////////// SERVER SIDE RENDERING
@@ -127,10 +65,12 @@ res.send(`
     <!DOCTYPE html>
     <html>
         <head>
-            <title> Messenger </title>
+            <title> Produkty </title>
             <script src='/bundle.js' defer></script>
             ${sheet.getStyleTags()}
             <link rel="stylesheet" href="App.css">
+            <link rel="stylesheet" href="Carousel.css">
+            <link rel="stylesheet" href="node_modules/react-multi-carousel/lib/styles">
             <script>window.__INITIAL_DATA__ = "${context}"</script>
             <meta
             <meta name="viewport" content="width=device-width, initial-scale=1.0">

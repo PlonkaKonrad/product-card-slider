@@ -21,6 +21,7 @@ const browserConfig = {
         rules: [
             {test: /\.(js)$/, use: 'babel-loader'},
             {test: /\.(png|jpe?g|gif)$/i, use: [{loader: 'file-loader',},],},
+
         ],
     },
     
@@ -57,6 +58,7 @@ const serverConfig= {
         rules: [
             {test: /\.(js)$/, use: 'babel-loader'},
             {test: /\.(png|jpe?g|gif)$/i, use: [{loader: 'file-loader',},],},
+
         ],
         
     },

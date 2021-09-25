@@ -1,6 +1,5 @@
-
+import Home from "./Home";
 ////////////////////////////////////////  DYNAMIC ROUTES FOR APP COMPONENT ////////////////////////////////////
-
 
 const routes = [{
         path: '/',
