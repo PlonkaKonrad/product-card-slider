@@ -14,9 +14,21 @@ const StyledWrapper = styled.div`
     cursor: pointer;
     box-shadow: 0 0 10px 10px rgba(136, 177, 242, 0.1);
 
-    :hover img{
-        box-shadow: 0 0 10px 0 #bbb;
-        transform: translateY(-20px);
+    :hover {
+        img{
+            box-shadow: 0 0 10px 0 #bbb;
+            animation: hover 0.5s ease ;
+            transform: translateY(-20px);
+        }
+
+        .img-main{
+            display: none
+        }
+
+        .img-second{
+            display: block;
+        }
+       
     }
 
 
@@ -30,6 +42,18 @@ const StyledWrapper = styled.div`
         width: 100%;
         text-align: center;
     }
+
+
+    @keyframes hover {
+        0%{
+            transform: translateY(0);
+        }
+
+        100%{
+            transform: translateY(-20px);
+        }
+    }
+    
 `;
 
 const StyledImage = styled.div`
@@ -42,11 +66,28 @@ const StyledImage = styled.div`
     transition: 0.2s;
     border-radius: 10px;
 
+
     img{
         height: 100%;
         width: auto;
-        transition: 0.2s; 
+        transition: 2s; 
         border-radius: 10px;
+        animation: unhover 0.5s ease ;
+    }
+
+    .img-second{
+        display: none;
+    }
+
+    @keyframes unhover {
+        0%{
+            transform: translateY(-20px);
+        }
+
+        100%{
+            transform: translateY(0);
+           
+        }
     }
 
     
@@ -63,12 +104,16 @@ const StyledContainer = styled.div`
 `;
 
 const Product = (props) => {
+
+    const random = Math.floor(Math.random() * props.images.length-1) + 1
+    
     return ( 
         <>
         <StyledContainer>
         <StyledWrapper>
             <StyledImage>
-                <img src={props.main_image}></img>
+                <img className='img-main' src={props.main_image}></img>
+                <img className='img-second' src={props.images[random]}></img>
             </StyledImage>
             <h4>{props.name}</h4>
             <p>{props.description}</p>
